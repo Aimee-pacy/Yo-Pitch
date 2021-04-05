@@ -1,28 +1,30 @@
 {% extends 'base.html'%}
+{% import 'bootstrap/wtf.html' as wtf%}
+<link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Courgette&display=swap" rel="stylesheet">
 
-{% from 'comment_macro.html' import display_comments%}
-{% import 'bootstrap/wtf.html' as wtf %}
-{% block styles %}
-{{super()}}
-<link rel="stylesheet" href="{{url_for('static',filename='css/particle.css')}}">
-<link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
+{% block content%}
+<div class="container">
+    <h3 class="text-center m-4" style="font-family: 'Times New Roman', Times, serif;"><strong>Write a comment</strong></h3>
+    <div class="card p-5 jumbotron" style="background-color: rgb(247, 206, 213);">
+        {{ wtf.quick_form(form)}}
+    </div>
+
+    {% if all_comments %}
+
+    <div class="m-5">
+        {% for comment in all_comments %} <div class="card">
+            <div class="card p-3">
+                <p class="card-title" style="font-family: 'Bad Script', cursive;"> <ul>{{ comment.comment | capitalize }} </ul> </p>
+                <hr style="border: 1px solid rgb(241, 166, 179);">
+                <p class="card-text" style="font-family: 'Courgette', cursive;font-weight: bold; font-size:16px;">{{ comment.user.username | capitalize}}:</p>
+            </div>
+        </div>
+        {% endfor %}
+        
+    </div>
+    {% else %}
+    <p> No Comments</p>
+    {%endif%}
+</div>
 {% endblock %}
-
-{% block content %}
-<div class="container-fluid">
-    <div class="jumbotron">
-        <h1>Comments page</h1>
-        <a href="/posts"><button class="btn">All Pitches</button></a>
-    </div>
-<div class="row col-md-12">
-    <div class="col-md-4">
-        <div class="text-white">{{wtf.quick_form(form)}}</div>
-    </div>
-    <div class="col-md-8">
-        <h2 class="text-center text-white">All comments:</h2>
-        <p>{{display_comments(comments)}}</p>
-    </div>
-</div>
-
-</div>
-{% endblock%}
